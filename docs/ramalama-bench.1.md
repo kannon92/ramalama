@@ -72,6 +72,12 @@ ramalama bench --backend vulkan granite
 ramalama bench --backend rocm granite
 ```
 
+#### **--cache-reuse**=256
+Min chunk size to attempt reusing from the cache via KV shifting
+
+#### **--ctx-size**, **-c**
+size of the prompt context. This option is also available as **--max-model-len**. Applies to llama.cpp and vllm regardless of alias (default: 0, 0 = loaded from model)
+
 #### **--device**
 Add a host device to the container. Optional permissions parameter can
 be used to specify device permissions by combining r for read, w for
@@ -126,6 +132,13 @@ Accelerated images:
 pass --group-add keep-groups to podman (default: False)
 If GPU device on host system is accessible to user via group access, this option leaks the groups into the container.
 
+#### **--max-tokens**=*integer*
+Maximum number of tokens to generate. Set to 0 for unlimited output (default: 0).
+This parameter is mapped to the appropriate runtime-specific parameter:
+- llama.cpp: `-n` parameter
+- MLX: `--max-tokens` parameter
+- vLLM: `--max-tokens` parameter
+
 #### **--name**, **-n**
 name of the container to run the Model in
 
@@ -170,11 +183,24 @@ not have more privileges than the user that launched them.
 - **never**: Never pull the image but use the one from the local containers storage. Throw an error when no image is found.
 - **newer**: Pull if the image on the registry is newer than the one in the local containers storage. An image is considered to be newer when the digests are different. Comparing the time stamps is prone to errors. Pull errors are suppressed if a local image was found.
 
+#### **--runtime-args**="*args*"
+Add *args* to the runtime (llama.cpp or vllm) invocation.
+
 #### **--seed**=
 Specify seed rather than using random seed model interaction
 
 #### **--selinux**=*true*
 Enable SELinux container separation
+
+#### **--temp**="0.8"
+Temperature of the response from the AI Model
+llama.cpp explains this as:
+
+  The lower the number is, the more deterministic the response.
+
+  The higher the number is the more creative the response is, but more likely to hallucinate when set too high.
+
+    Usage: Lower numbers are good for virtual assistants where we need deterministic responses. Higher numbers are good for roleplay or creative tasks like editing stories
 
 #### **--threads**, **-t**
 Maximum number of cpu threads to use.

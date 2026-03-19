@@ -402,9 +402,7 @@ class LlamaCppPlugin(LlamaCppCommands, ContainerizedInferenceRuntimePlugin):
         # bench / benchmark
         bench_parser = subparsers.add_parser("bench", aliases=["benchmark"], help="benchmark specified AI Model")
         runtime_options(bench_parser, "bench")
-        self._add_backend_arg(bench_parser)
-        self._add_ngl_arg(bench_parser)
-        self._add_threads_arg(bench_parser)
+        self._add_inference_args(bench_parser, "bench")
         bench_parser.add_argument("MODEL", completer=local_models)
         bench_parser.add_argument(
             "--format",
