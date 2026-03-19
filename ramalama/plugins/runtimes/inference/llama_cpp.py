@@ -307,26 +307,7 @@ class LlamaCppPlugin(LlamaCppCommands, ContainerizedInferenceRuntimePlugin):
         # bench / benchmark
         bench_parser = subparsers.add_parser("bench", aliases=["benchmark"], help="benchmark specified AI Model")
         runtime_options(bench_parser, "bench")
-        # llama.cpp-specific bench args
-        bench_parser.add_argument(
-            "--ngl",
-            dest="ngl",
-            type=int,
-            default=_NGL_DEFAULT,
-            help="number of layers to offload to the gpu, if available",
-            completer=suppressCompleter,
-        )
-        def_threads = _default_threads()
-        bench_parser.add_argument(
-            "-t",
-            "--threads",
-            type=int,
-            default=def_threads,
-            help=(
-                f"number of cpu threads to use, the default is {def_threads} on this system, -1 means use this default"
-            ),
-            completer=suppressCompleter,
-        )
+        self._add_inference_args(bench_parser, "bench")
         bench_parser.add_argument("MODEL", completer=local_models)
         bench_parser.add_argument(
             "--format",
